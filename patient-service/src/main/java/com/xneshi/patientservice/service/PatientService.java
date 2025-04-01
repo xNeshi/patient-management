@@ -2,7 +2,6 @@ package com.xneshi.patientservice.service;
 
 import com.xneshi.patientservice.dto.PatientRequestDTO;
 import com.xneshi.patientservice.dto.PatientResponseDTO;
-import com.xneshi.patientservice.dto.PatientUpdateDTO;
 import com.xneshi.patientservice.exception.EmailAlreadyExistsException;
 import com.xneshi.patientservice.exception.PatientNotFoundException;
 import com.xneshi.patientservice.mapper.PatientMapper;
@@ -41,22 +40,29 @@ public class PatientService {
     return PatientMapper.toResponseDTO(patient);
   }
 
-  public PatientResponseDTO updatePatient(UUID id, PatientUpdateDTO patientUpdateDTO) {
+  public PatientResponseDTO updatePatient(UUID id, PatientResponseDTO patientResponseDTO) {
     Patient patient = patientRepository.findById(id).orElseThrow(() ->
         new PatientNotFoundException("Patient not found with ID: " + id));
 
-    String email = patientUpdateDTO.email();
+    String email = patientResponseDTO.email();
     if (patientRepository.existsByEmail(email)) {
       throw new EmailAlreadyExistsException("A patient with email " + email + " already exists");
     }
 
-    patient.setName(patientUpdateDTO.name());
+    patient.setName(patientResponseDTO.name());
     patient.setEmail(email);
-    patient.setAddress(patientUpdateDTO.address());
-    patient.setDateOfBirth(LocalDate.parse(patientUpdateDTO.dateOfBirth()));
+    patient.setAddress(patientResponseDTO.address());
+    patient.setDateOfBirth(LocalDate.parse(patientResponseDTO.dateOfBirth()));
 
     Patient updatedPatient = patientRepository.save(patient);
 
     return PatientMapper.toResponseDTO(updatedPatient);
+  }
+
+  public void deletePatient(UUID id) {
+    Patient patient = patientRepository.findById(id).orElseThrow(() ->
+        new PatientNotFoundException("Patient not found with ID: " + id));
+
+    patientRepository.delete(patient);
   }
 }
