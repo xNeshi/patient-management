@@ -2,6 +2,7 @@ package com.xneshi.patientservice.controller;
 
 import com.xneshi.patientservice.dto.PatientRequestDTO;
 import com.xneshi.patientservice.dto.PatientResponseDTO;
+import com.xneshi.patientservice.dto.PatientUpdateDTO;
 import com.xneshi.patientservice.service.PatientService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,9 @@ public class PatientController {
 
   @PutMapping("/{id}")
   public ResponseEntity<PatientResponseDTO> updatePatient(
-      @Valid @PathVariable UUID id,
-      @Valid @RequestBody PatientRequestDTO patientRequestDTO
-  ) {
-    return ResponseEntity.ok().body(patientService.updatePatient(id, patientRequestDTO));
+      @PathVariable UUID id,
+      @Valid @RequestBody PatientUpdateDTO patientUpdateDTO
+      ) {
+    return ResponseEntity.ok().body(patientService.updatePatient(id, patientUpdateDTO));
   }
 }

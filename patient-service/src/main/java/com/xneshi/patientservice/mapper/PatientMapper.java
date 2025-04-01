@@ -2,6 +2,7 @@ package com.xneshi.patientservice.mapper;
 
 import com.xneshi.patientservice.dto.PatientRequestDTO;
 import com.xneshi.patientservice.dto.PatientResponseDTO;
+import com.xneshi.patientservice.dto.PatientUpdateDTO;
 import com.xneshi.patientservice.model.Patient;
 
 import java.time.LocalDate;
