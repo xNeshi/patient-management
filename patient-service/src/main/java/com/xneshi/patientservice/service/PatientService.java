@@ -1,5 +1,6 @@
 package com.xneshi.patientservice.service;
 
+import com.xneshi.patientservice.dto.PatientRequestDTO;
 import com.xneshi.patientservice.dto.PatientResponseDTO;
 import com.xneshi.patientservice.mapper.PatientMapper;
 import com.xneshi.patientservice.model.Patient;
@@ -22,5 +23,10 @@ public class PatientService {
     return patients.stream()
         .map(PatientMapper::toResponseDTO)
         .collect(Collectors.toList());
+  }
+
+  public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
+    Patient patient = patientRepository.save(PatientMapper.toPatient(patientRequestDTO));
+    return PatientMapper.toResponseDTO(patient);
   }
 }
