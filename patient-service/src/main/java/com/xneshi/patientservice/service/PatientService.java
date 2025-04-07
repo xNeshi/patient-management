@@ -4,6 +4,7 @@ import com.xneshi.patientservice.dto.PatientRequestDTO;
 import com.xneshi.patientservice.dto.PatientResponseDTO;
 import com.xneshi.patientservice.exception.EmailAlreadyExistsException;
 import com.xneshi.patientservice.exception.PatientNotFoundException;
+import com.xneshi.patientservice.grpc.BillingServiceGrpcClient;
 import com.xneshi.patientservice.mapper.PatientMapper;
 import com.xneshi.patientservice.model.Patient;
 import com.xneshi.patientservice.repository.PatientRepository;
@@ -17,8 +18,10 @@ import java.util.stream.Collectors;
 @Service
 public class PatientService {
   private final PatientRepository patientRepository;
+  private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-  public PatientService(PatientRepository patientRepository) {
+  public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+    this.billingServiceGrpcClient = billingServiceGrpcClient;
     this.patientRepository = patientRepository;
   }
 
@@ -37,6 +40,7 @@ public class PatientService {
     }
 
     Patient patient = patientRepository.save(PatientMapper.toPatient(patientRequestDTO));
+    billingServiceGrpcClient.createBillingAccount(patient.getId().toString(), patient.getName(), patient.getEmail());
     return PatientMapper.toResponseDTO(patient);
   }
 

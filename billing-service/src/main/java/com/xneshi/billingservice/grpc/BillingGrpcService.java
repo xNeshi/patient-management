@@ -13,7 +13,7 @@ public class BillingGrpcService extends BillingServiceGrpc.BillingServiceImplBas
   @Override
   public void createBillingAccount(billing.BillingRequest billingRequest,
      StreamObserver<billing.BillingResponse> responseObserver) {
-    log.info("createBillingAccount called with request: {}", billingRequest.toString());
+    log.info("GRPC Server: createBillingAccount called with request {}", billingRequest.toString());
 
     BillingResponse response = BillingResponse.newBuilder()
         .setAccountId("12345")
